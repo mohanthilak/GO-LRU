@@ -41,7 +41,7 @@ func (S *HTTPServer) StartServer() {
 	S.initiateRoutes()
 
 	server := http.Server{
-		Addr:         "127.0.0.1:" + strconv.Itoa(S.port),
+		Addr:         "0.0.0.0:" + strconv.Itoa(S.port),
 		Handler:      handlers.CORS(handlers.AllowedMethods([]string{"GET", "HEAD", "POST", "PUT", "OPTIONS"}), handlers.AllowCredentials(), handlers.AllowedHeaders([]string{"Access-Control-Allow-Origin", "X-Requested-With", "Authorization", "Content-Type"}), handlers.AllowedOrigins([]string{"http://localhost:5173"}))(S.router),
 		ReadTimeout:  5 * time.Second,
 		WriteTimeout: 10 * time.Second,
