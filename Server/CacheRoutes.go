@@ -4,27 +4,21 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
-	"strconv"
 
 	"github.com/gorilla/mux"
 )
 
 type SetKeyValuePair struct {
-	Key   int `json:"key"`
-	Value int `json:"value"`
+	Key   string      `json:"key"`
+	Value interface{} `json:"value"`
 }
 
 func (s *HTTPServer) HandleGetValueFromKey(w http.ResponseWriter, r *http.Request) {
-	key, err := strconv.Atoi(mux.Vars(r)["key"])
-	if err != nil {
-		log.Println("error while decoding params", err)
-
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
+	key := mux.Vars(r)["key"]
+	log.Println("!!1", key)
 	value := s.app.GetValueFromKey(key)
 	w.WriteHeader(http.StatusAccepted)
-	json.NewEncoder(w).Encode(map[string]int{"key": key, "value": value})
+	json.NewEncoder(w).Encode(map[string]interface{}{"key": key, "value": value})
 }
 
 func (s *HTTPServer) HandleSetKeyValuePair(w http.ResponseWriter, r *http.Request) {
@@ -37,7 +31,7 @@ func (s *HTTPServer) HandleSetKeyValuePair(w http.ResponseWriter, r *http.Reques
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-
+	log.Printf("\n!!!!!!!!!!%+v\n", KeyValuePair)
 	s.app.SetKeyValuePair(KeyValuePair.Key, KeyValuePair.Value)
 	w.WriteHeader(http.StatusAccepted)
 	json.NewEncoder(w).Encode(map[string]string{"status": "Added Key Value Pair"})

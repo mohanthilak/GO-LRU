@@ -1,39 +1,51 @@
 package cache
 
+import (
+	"time"
+)
+
 type Cache struct {
-	list     *LinkedList
-	cacheMap map[int]*Node
-	Capacity int
+	list             *LinkedList
+	cacheMap         map[string]*Node
+	Capacity         int
+	EvictionDuration time.Duration
 }
 
 // Singleton Pattern
 var intantiatedCache *Cache = nil
 
-func IntantiateCache(Capacity int) *Cache {
-	if intantiatedCache == nil {
-		intantiatedCache = &Cache{Capacity: Capacity, list: NewLinkedList(Capacity), cacheMap: make(map[int]*Node)}
-	}
+func IntantiateCache(Capacity int, evictionDurtion time.Duration) *Cache {
+	// if intantiatedCache == nil {
+	// 	intantiatedCache = &Cache{Capacity: Capacity, list: NewLinkedList(Capacity), cacheMap: make(map[string]*Node), EvictionDuration: evictionDurtion}
+	// }
 
-	return intantiatedCache
+	// return intantiatedCache
+	return &Cache{Capacity: Capacity, list: NewLinkedList(Capacity), cacheMap: make(map[string]*Node), EvictionDuration: evictionDurtion}
 }
 
-func (c *Cache) Set(key int, value int) {
+func (c *Cache) RemoveLRU() {
+	delete(c.cacheMap, c.list.Tail.Prev.Key)
+	c.list.remove(c.list.Tail.Prev)
+}
+
+func (c *Cache) Set(key string, value interface{}) {
+	c.MakeEvictionCheck()
 	node, ok := c.cacheMap[key]
 	if ok {
 		c.list.remove(node)
 	} else {
 		if c.list.size >= c.Capacity {
-			delete(c.cacheMap, c.list.Tail.Prev.Key)
-			c.list.remove(c.list.Tail.Prev)
+			c.RemoveLRU()
 		}
 	}
 	c.list.add(key, value)
 	c.cacheMap[key] = c.list.head.Next
 }
 
-func (c *Cache) Get(key int) int {
+func (c *Cache) Get(key string) interface{} {
+	c.MakeEvictionCheck()
 	node, ok := c.cacheMap[key]
-	var value int = -1
+	var value interface{} = -1
 	if ok {
 		value = node.Value
 		c.list.swap(node)
@@ -44,4 +56,27 @@ func (c *Cache) Get(key int) int {
 
 func (c *Cache) PrintCache() {
 	c.list.printList()
+}
+
+func (c *Cache) MakeEvictionCheck() {
+	if c.list.size <= 0 {
+		return
+	}
+	temp := c.list.Tail.Prev
+
+	for temp != nil && c.list.size > 0 {
+		if time.Since(temp.TimeAccessed) > c.EvictionDuration {
+			temp = temp.Prev
+			c.RemoveLRU()
+		} else {
+			break
+		}
+	}
+}
+
+func (c *Cache) ClearCache() {
+	for k := range c.cacheMap {
+		delete(c.cacheMap, k)
+	}
+	c.list = NewLinkedList(c.Capacity)
 }

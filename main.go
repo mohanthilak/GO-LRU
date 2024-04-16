@@ -4,11 +4,12 @@ import (
 	app "go-lru/App"
 	cache "go-lru/Cache"
 	server "go-lru/Server"
+	"time"
 )
 
 func main() {
 
-	cache := cache.IntantiateCache(3)
+	cache := cache.IntantiateCache(3, 60*time.Second)
 
 	App := app.NewApp(cache)
 

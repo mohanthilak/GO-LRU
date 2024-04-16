@@ -15,8 +15,8 @@ const AddKeyValuePair = () => {
         fetch("http://localhost:8080/set", {
             method: 'POST',
             body:JSON.stringify({
-                "key": parseInt(keyText),
-                "value": parseInt(valueText)  
+                key: keyText,
+                value: valueText  
             }),
             headers: { 'Content-Type': 'application/json' }
         }).then(res=>res.json()).then(res=>{
