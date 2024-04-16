@@ -9,7 +9,7 @@ import (
 
 func main() {
 
-	cache := cache.IntantiateCache(3, 60*time.Second)
+	cache := cache.InstantiateCache(3, 60*time.Second)
 
 	App := app.NewApp(cache)
 

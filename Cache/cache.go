@@ -12,14 +12,14 @@ type Cache struct {
 }
 
 // Singleton Pattern
-var intantiatedCache *Cache = nil
+var instantiatedCache *Cache = nil
 
-func IntantiateCache(Capacity int, evictionDurtion time.Duration) *Cache {
-	// if intantiatedCache == nil {
-	// 	intantiatedCache = &Cache{Capacity: Capacity, list: NewLinkedList(Capacity), cacheMap: make(map[string]*Node), EvictionDuration: evictionDurtion}
+func InstantiateCache(Capacity int, evictionDurtion time.Duration) *Cache {
+	// if instantiatedCache == nil {
+	// 	instantiatedCache = &Cache{Capacity: Capacity, list: NewLinkedList(Capacity), cacheMap: make(map[string]*Node), EvictionDuration: evictionDurtion}
 	// }
 
-	// return intantiatedCache
+	// return instantiatedCache
 	return &Cache{Capacity: Capacity, list: NewLinkedList(Capacity), cacheMap: make(map[string]*Node), EvictionDuration: evictionDurtion}
 }
 

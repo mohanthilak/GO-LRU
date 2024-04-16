@@ -6,7 +6,7 @@ import (
 )
 
 func TestIntantiateCache(t *testing.T) {
-	cache := IntantiateCache(10, 10*time.Second)
+	cache := InstantiateCache(10, 10*time.Second)
 	t.Cleanup(func() {
 		cache = nil
 	})
@@ -20,7 +20,7 @@ func TestIntantiateCache(t *testing.T) {
 
 func TestSetGet(t *testing.T) {
 	t.Run("Testing set and Get", func(t *testing.T) {
-		cache := IntantiateCache(2, 0) // Disable eviction for this test
+		cache := InstantiateCache(2, 0) // Disable eviction for this test
 		t.Cleanup(func() {
 			cache = nil
 		})
@@ -39,7 +39,7 @@ func TestSetGet(t *testing.T) {
 	})
 
 	t.Run("Testing stability after change in order", func(t *testing.T) {
-		cache := IntantiateCache(2, 0) // Disable eviction for this test
+		cache := InstantiateCache(2, 0) // Disable eviction for this test
 
 		t.Cleanup(func() {
 			cache = nil
@@ -59,7 +59,7 @@ func TestSetGet(t *testing.T) {
 	})
 
 	t.Run("Testing stability after updating value", func(t *testing.T) {
-		cache := IntantiateCache(2, 0) // Disable eviction for this test
+		cache := InstantiateCache(2, 0) // Disable eviction for this test
 
 		t.Cleanup(func() {
 			cache = nil
@@ -72,7 +72,7 @@ func TestSetGet(t *testing.T) {
 	})
 
 	t.Run("Testing Time based Eviction", func(t *testing.T) {
-		cache := IntantiateCache(2, 2*time.Second)
+		cache := InstantiateCache(2, 2*time.Second)
 		if cache.EvictionDuration != 2*time.Second {
 			t.Errorf("Expected eviction duration to be 2s, got %v", cache.EvictionDuration)
 		}
