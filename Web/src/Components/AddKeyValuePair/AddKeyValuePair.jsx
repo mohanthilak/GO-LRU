@@ -1,5 +1,5 @@
 import { useRef } from 'react'
-
+import "./style.css"
 const AddKeyValuePair = () => {
     const InputKeyRef = useRef();
     const InputValueRef = useRef();
@@ -27,13 +27,18 @@ const AddKeyValuePair = () => {
         })
     }
   return (
-    <div>
+    <div className='add-component-div'>
+        <div className='header'>
+            <h2>Add to cache</h2>
+            <p></p>
+
+        </div>
         <form onSubmit={handleSubmit}>
-            <div>
+            <div className='input-div'>
                 <label htmlFor="add-key">Add Key</label>
                 <input ref={InputKeyRef} type="text" id='add-key' />
             </div>
-            <div>
+            <div className='input-div'>
                 <label htmlFor="add-value">Add Value</label>
                 <input ref={InputValueRef} type="text" id='add-value' />
             </div>
