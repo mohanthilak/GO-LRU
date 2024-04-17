@@ -2,6 +2,7 @@ package cache
 
 import (
 	"fmt"
+	"sync"
 	"time"
 )
 
@@ -10,6 +11,7 @@ type LinkedList struct {
 	Tail     *Node
 	size     int
 	Capacity int
+	mu       sync.Mutex
 }
 
 func NewLinkedList(capacity int) *LinkedList {
@@ -27,6 +29,8 @@ func NewLinkedList(capacity int) *LinkedList {
 }
 
 func (ll *LinkedList) remove(node *Node) {
+	ll.mu.Lock()
+	defer ll.mu.Unlock()
 	prev := node.Prev
 	next := node.Next
 
@@ -41,6 +45,9 @@ func (ll *LinkedList) remove(node *Node) {
 }
 
 func (ll *LinkedList) add(key string, value interface{}) {
+	ll.mu.Lock()
+	defer ll.mu.Unlock()
+
 	next := ll.head.Next
 	node := &Node{Key: key, Value: value, TimeAccessed: time.Now()}
 	next.Prev = node

@@ -15,7 +15,6 @@ type SetKeyValuePair struct {
 
 func (s *HTTPServer) HandleGetValueFromKey(w http.ResponseWriter, r *http.Request) {
 	key := mux.Vars(r)["key"]
-	log.Println("!!1", key)
 	value := s.app.GetValueFromKey(key)
 	w.WriteHeader(http.StatusAccepted)
 	json.NewEncoder(w).Encode(map[string]interface{}{"key": key, "value": value})
@@ -31,7 +30,6 @@ func (s *HTTPServer) HandleSetKeyValuePair(w http.ResponseWriter, r *http.Reques
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	log.Printf("\n!!!!!!!!!!%+v\n", KeyValuePair)
 	s.app.SetKeyValuePair(KeyValuePair.Key, KeyValuePair.Value)
 	w.WriteHeader(http.StatusAccepted)
 	json.NewEncoder(w).Encode(map[string]string{"status": "Added Key Value Pair"})
